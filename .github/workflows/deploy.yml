@@ -44,9 +44,11 @@ jobs:
         with:
           node-version: lts/*
           cache: 'pnpm'
+          cache-dependency-path: 'frontend/pnpm-lock.yaml'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: frontend
 
       - name: Create .env file
         working-directory: frontend
