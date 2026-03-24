@@ -1,6 +1,6 @@
 import express from "express";
 import helmet from "helmet";
-import cors from "cors";
+import cors, { type CorsOptions } from "cors";
 import rateLimit from "express-rate-limit";
 import feedRoutes from "./routes/feed.routes.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
@@ -14,8 +14,25 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
+const corsOrigin = process.env.CORS_ORIGIN?.trim();
+const corsOriginList = corsOrigin
+  ? corsOrigin
+      .split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean)
+  : [];
+
+const corsOptions: CorsOptions = {
+  origin:
+    corsOriginList.length === 0
+      ? true
+      : corsOriginList.length === 1
+        ? corsOriginList[0]
+        : corsOriginList,
+};
+
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
