@@ -1,7 +1,7 @@
-import { Video } from "../../generated/client";
-import { prisma } from "../config/db";
-import { GetVideosResult } from "../types/feed.repository";
-import { PaginationParams } from "../types/pagination";
+import { Video } from "../../generated/client.js";
+import { prisma } from "../config/db.js";
+import { GetVideosResult } from "../types/feed.repository.js";
+import { PaginationParams } from "../types/pagination.js";
 
 export class FeedRepository {
   async getVideos({ page, limit }: PaginationParams): Promise<GetVideosResult> {

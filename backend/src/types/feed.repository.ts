@@ -1,4 +1,4 @@
-import { Video } from "../../generated/client";
+import { Video } from "../../generated/client.js";
 
 export interface GetVideosResult {
   data: Video[];

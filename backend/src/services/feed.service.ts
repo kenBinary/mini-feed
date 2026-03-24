@@ -1,6 +1,6 @@
 import { FeedRepository } from "../repositories/feed.repository.js";
 import { PaginationParams, PaginatedResult } from "../types/pagination.js";
-import { Video } from "../../generated/client";
+import { Video } from "../../generated/client.js";
 
 export class FeedService {
   private repository = new FeedRepository();
