@@ -14,85 +14,80 @@ async function main() {
 
   await prisma.video.deleteMany();
 
-  const videos = [
+  const baseVideos = [
     {
-      title: "Learn Modern TypeScript",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/3178c6/white?text=Learn+Modern+TypeScript",
+      file: "BigBuckBunny.mp4",
+      baseTitle: "Learn Modern TypeScript",
+      color: "3178c6/white",
     },
     {
-      title: "Advanced Express API",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/333333/white?text=Advanced+Express+API",
+      file: "ElephantsDream.mp4",
+      baseTitle: "Advanced Express API",
+      color: "333333/white",
     },
     {
-      title: "Prisma 7 Deep Dive",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/0c344b/white?text=Prisma+7+Deep+Dive",
+      file: "ForBiggerBlazes.mp4",
+      baseTitle: "Prisma Deep Dive",
+      color: "0c344b/white",
     },
     {
-      title: "Neon Serverless Postgres",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/00e599/black?text=Neon+Serverless+Postgres",
+      file: "ForBiggerEscapes.mp4",
+      baseTitle: "Neon Serverless Postgres",
+      color: "00e599/black",
     },
     {
-      title: "Clean Architecture in Node",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/1e293b/white?text=Clean+Architecture+in+Node",
+      file: "ForBiggerFun.mp4",
+      baseTitle: "Clean Architecture in Node",
+      color: "1e293b/white",
     },
     {
-      title: "React Performance Tips",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/20232a/61dafb?text=React+Performance+Tips",
+      file: "ForBiggerJoyrides.mp4",
+      baseTitle: "React Performance Tips",
+      color: "20232a/61dafb",
     },
     {
-      title: "Understanding Zod",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/3068b7/white?text=Understanding+Zod",
+      file: "ForBiggerMeltdowns.mp4",
+      baseTitle: "Understanding Zod",
+      color: "3068b7/white",
     },
     {
-      title: "Deploying to AWS",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/232f3e/ff9900?text=Deploying+to+AWS",
+      file: "Sintel.mp4",
+      baseTitle: "Deploying to AWS",
+      color: "232f3e/ff9900",
     },
     {
-      title: "REST vs GraphQL",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/e10098/white?text=REST+vs+GraphQL",
+      file: "SubaruOutbackOnStreetAndDirt.mp4",
+      baseTitle: "REST vs GraphQL",
+      color: "e10098/white",
     },
     {
-      title: "Next.js 15 Features",
-      videoUrl:
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-      thumbnailUrl:
-        "https://placehold.co/800x450/000000/white?text=Next.js+15+Features",
+      file: "TearsOfSteel.mp4",
+      baseTitle: "Next.js Features",
+      color: "000000/white",
     },
   ];
 
-  for (const v of videos) {
-    await prisma.video.create({
-      data: v,
-    });
-  }
-  console.log("Seeding finished.");
+  const TOTAL_VIDEOS = 50;
+
+  const videos = Array.from({ length: TOTAL_VIDEOS }, (_, i) => {
+    const base = baseVideos[i % baseVideos.length];
+
+    const title = `${base.baseTitle} #${i + 1}`;
+
+    return {
+      title,
+      videoUrl: `https://storage.googleapis.com/gtv-videos-bucket/sample/${base.file}`,
+      thumbnailUrl: `https://placehold.co/800x450/${base.color}?text=${encodeURIComponent(
+        title
+      )}`,
+    };
+  });
+
+  await prisma.video.createMany({
+    data: videos,
+  });
+
+  console.log(`Seeding finished. Inserted ${videos.length} videos.`);
 }
 
 main()
